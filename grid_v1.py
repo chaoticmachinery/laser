@@ -245,7 +245,7 @@ class LaserGridApp(tk.Tk):
         frame = tk.Frame(parent, padx=10, pady=10)
         frame.pack(expand=True, fill='both')
 
-        tk.Label(frame, text="Freq ↓\nQ-Pulse →", font=("Arial", 10, "bold")).grid(row=0, column=0, padx=5, pady=5)
+        tk.Label(frame, text="Q-Pulse →\nFreq ↓", font=("Arial", 10, "bold")).grid(row=0, column=0, padx=5, pady=5)
 
         for col, val in enumerate(qpulse, 1):
             tk.Label(frame, text=str(val), width=6, relief="ridge", bg="#e0e0e0").grid(row=0, column=col)
