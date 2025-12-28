@@ -5,10 +5,73 @@
 #Written by: Keven Murphy
 #Version: 1.0
 #
-#Mark out the interesting squares in your Lightburn material test.
-#Saves the output to csv and will reload the csv saved files.
-#Load the csv into a spreadsheet and start creating settings in the materials library.
+#Purpose
+#This is a Python desktop tool (built with Tkinter) designed to help users of MOPA fiber lasers (or similar galvo lasers) systematically test and document optimal engraving parameters, especially for materials like stainless steel where frequency (kHz) and Q-pulse width (ns) dramatically affect color, depth, contrast, and finish.
+#Main Features
+#
+#Interactive Parameter Grid
+#Two tabs (grids) showing combinations of:
+#Frequency (kHz) – vertical axis (highest at top, lowest at bottom)
+#Q-pulse width (ns) – horizontal axis
+#
+#Grid 1: pulses (default 1–200 ns)
+#Grid 2: pulses (default 200–500 ns)
+#You can freely change the start/end values for frequency and each Q-pulse range → grids regenerate instantly when you click "Apply Ranges"
+#
+#Cell Annotation
+#Click any cell → popup asks for a short note/rating (e.g. "gold", "deep", "8/10", "skip")
+#Annotated cells turn light green and display the text
+#Notes are the main way to mark "good" or promising settings
+#
+#Global Test Parameters
+#Editable fields for:
+#Title / Test Name
+#Speed (mm/s)
+#Max Power (%)
+#Line interval (mm)
+#Number of passes
 
+#New scan settings:
+#Mode (dropdown: Fill, Line, Cross, Hatch, etc.)
+#Angle increment (°)
+#Auto-rotate (°)
+#Bi-directional (checkbox)
+#Cross-hatch (checkbox)
+
+#Export to CSV
+#Saves all annotated cells as rows
+#Each row contains:
+#Desc.: note + all key parameters including Q-pulse (e.g. "gold (Spd: 3000 - Pwr: 20 - LI: 0.0020 - Qp: 15)")
+#Sub-layer name (the note itself)
+#Freq.
+#Max power
+#Q-pulse
+#LI
+#
+#All global parameters + scan settings + ranges are saved as # comment lines at the top of the file (metadata)
+#
+#Import / Load from CSV
+#Restores:
+#All range start/end values (grids regenerate automatically)
+#Title
+#Speed, Power, LI, Passes
+#Mode, Angle increment, Auto-rotate, Bi-directional, Cross-hatch
+#All previously annotated cells (notes reappear on the correct grid positions)
+#
+#Uses tolerant matching (rounds frequency to 1 decimal) so small floating-point differences don't break loading
+#
+#Summary View
+#Quick popup showing current title, all parameters, scan settings, current ranges, and list of all notes with their freq/Q-pulse coordinates
+#
+#
+#Overall Workflow
+#
+#Set desired frequency and Q-pulse ranges → Apply
+#Engrave your test plate using the grid parameters
+#Visually inspect the real plate → click corresponding cells in the app → add notes ("best color", "too deep", "skip", etc.)
+#Export CSV → keeps a perfect digital record of what worked
+#Later reload the same CSV → everything (ranges, settings, notes) comes back exactly as you left it
+#
 
 import tkinter as tk
 from tkinter import ttk, simpledialog, messagebox, filedialog
@@ -31,9 +94,9 @@ class LaserGridApp(tk.Tk):
         self.freq_start_var = tk.StringVar(value="3800.0")
         self.freq_end_var   = tk.StringVar(value="100.0")
         self.q1_start_var   = tk.StringVar(value="1")
-        self.q1_end_var     = tk.StringVar(value="100")
-        self.q2_start_var   = tk.StringVar(value="101")
-        self.q2_end_var     = tk.StringVar(value="200")
+        self.q1_end_var     = tk.StringVar(value="200")
+        self.q2_start_var   = tk.StringVar(value="201")
+        self.q2_end_var     = tk.StringVar(value="500")
 
         # New scan settings
         self.mode_var = tk.StringVar(value="Fill")
