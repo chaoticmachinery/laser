@@ -270,7 +270,7 @@ class LaserGridApp(tk.Tk):
         new_text = simpledialog.askstring("Note", "Enter note/rating:", initialvalue=current, parent=self)
         if new_text is None:
             return
-        new_text = new_text.strip()[:12]
+        new_text = new_text.strip()[:40]
         if new_text:
             self.notes[key] = new_text
             self.buttons[key].config(text=new_text, bg="#90EE90", fg="black", font=("Arial", 8, "bold"))
